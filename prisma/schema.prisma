@@ -7,45 +7,46 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Airport {
+
+model airport {
   code        String  @id
   name        String
   lat         Float
   lon         Float
-  routesFrom  Route[] @relation("From")
-  routesTo    Route[] @relation("To")
+  routesFrom  route[] @relation("From")
+  routesTo    route[] @relation("To")
 }
 
-model Route {
+model route {
   id           Int       @id @default(autoincrement())
-  origin       Airport   @relation("From", fields: [originCode], references: [code])
+  origin       airport   @relation("From", fields: [originCode], references: [code])
   originCode   String
-  destination  Airport   @relation("To", fields: [destCode], references: [code])
+  destination  airport   @relation("To", fields: [destCode], references: [code])
   destCode     String
 
-  airline      Airline   @relation(fields: [airlineCode], references: [code])
+  airline      airline   @relation(fields: [airlineCode], references: [code])
   airlineCode  String
 
-  aircraft     Aircraft  @relation(fields: [aircraftCode], references: [code])
+  aircraft     aircraft  @relation(fields: [aircraftCode], references: [code])
   aircraftCode String
 
   lieFlat      Boolean   @default(true)
   frequency    String    @default("Year-round") 
 }
 
-model Airline {
+model airline {
   code        String  @id
   name        String
-  routes      Route[]
+  routes      route[]
 }
 
-model Aircraft {
+model aircraft {
   code        String  @id
   model       String
   class       String
-  routes      Route[]
+  routes      route[]
 }
