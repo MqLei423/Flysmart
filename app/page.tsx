@@ -3,28 +3,32 @@
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useEffect, useState } from "react";
+import * as turf from "@turf/turf";
 
+// Dynamic imports for SSR
 const MapContainer = dynamic(
   () => import("react-leaflet").then((mod) => mod.MapContainer),
   { ssr: false }
 );
-
 const TileLayer = dynamic(
   () => import("react-leaflet").then((mod) => mod.TileLayer),
   { ssr: false }
 );
-
 const Marker = dynamic(
   () => import("react-leaflet").then((mod) => mod.Marker),
   { ssr: false }
 );
-
-
 const Popup = dynamic(
   () => import("react-leaflet").then((mod) => mod.Popup),
   { ssr: false }
 );
+const Polyline = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Polyline),
+  { ssr: false }
+);
 
+// Airport list
 const airports = [
   { code: "JFK", name: "New York JFK", position: [40.6413, -73.7781] },
   { code: "EWR", name: "Newark Liberty", position: [40.6895, -74.1745] },
@@ -33,7 +37,7 @@ const airports = [
   { code: "MCO", name: "Orlando Intl", position: [28.4312, -81.3081] },
   { code: "CLT", name: "Charlotte Douglas", position: [35.2144, -80.9473] },
   { code: "ATL", name: "Atlanta Hartsfield-Jackson", position: [33.6407, -84.4277] },
-  { code: "ORD", name: "Chicago O'Hare", position: [41.9742, -87.9073] },
+  { code: "ORD", name: "Chicago OHare", position: [41.9742, -87.9073] },
   { code: "DFW", name: "Dallas/Fort Worth", position: [32.8998, -97.0403] },
   { code: "DEN", name: "Denver Intl", position: [39.8561, -104.6737] },
   { code: "SFO", name: "San Francisco Intl", position: [37.6213, -122.3790] },
@@ -48,36 +52,36 @@ const airports = [
   { code: "OGG", name: "Maui Kahului", position: [20.8987, -156.4305] },
 ];
 
-
-const usBounds = [
-  [15, -170], // Southwest corner (includes Hawaii)
-  [55, -60],  // Northeast corner
-];
-
-// Define custom icon (this is the key part)
+// Custom marker icon
 const planeIcon = L.icon({
-  iconUrl: "/map_pin.png",     // relative to /public
-  iconSize: [32, 32],          // adjust size to fit your image
-  iconAnchor: [16, 32],        // point that will be at marker’s location
-  popupAnchor: [0, -32],       // popup position relative to the icon
+  iconUrl: "/map_pin.png",
+  iconSize: [32, 32],
+  iconAnchor: [16, 32],
+  popupAnchor: [0, -32],
 });
 
 export default function Home() {
-  const position: [number, number] = [20, 0];
+  const [routes, setRoutes] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/routes")
+      .then((res) => res.json())
+      .then((data) => setRoutes(data))
+      .catch(console.error);
+  }, []);
 
   return (
     <main className="w-screen h-screen">
       <MapContainer
-        center={[39.5, -98.35]}   // roughly the center of the continental U.S.
-        zoom={4}                  // zoomed in enough to show the whole U.S.
+        center={[39.5, -98.35]}   // Center of continental US
+        zoom={4}
         minZoom={4}
         maxZoom={8}
         maxBounds={[
           [15, -180],  // southwest corner (includes Hawaii)
-          [55, -60],   // northeast corner (Maine)
+          [55, -60],   // northeast corner
         ]}
-
-        maxBoundsViscosity={1.0}  // prevents dragging off the map
+        maxBoundsViscosity={1.0}
         className="w-full h-full"
       >
         <TileLayer
@@ -85,6 +89,7 @@ export default function Home() {
           attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         />
 
+        {/* Airport markers */}
         {airports.map((a) => (
           <Marker
             key={a.code}
@@ -104,6 +109,16 @@ export default function Home() {
             </Popup>
           </Marker>
         ))}
+
+        {/* Great-circle arcs for routes */}
+        {routes.map((r) => {
+          const from = turf.point([r.origin.lon, r.origin.lat]);
+          const to = turf.point([r.destination.lon, r.destination.lat]);
+          const line = turf.greatCircle(from, to, { npoints: 50 });
+          const positions = line.geometry.coordinates.map((c: number[]) => [c[1], c[0]]);
+
+          return <Polyline key={r.id} positions={positions} color="blue" weight={2} />;
+        })}
       </MapContainer>
     </main>
   );
