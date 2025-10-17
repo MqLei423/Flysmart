@@ -27,6 +27,11 @@ const Polyline = dynamic(
   () => import("react-leaflet").then((mod) => mod.Polyline),
   { ssr: false }
 );
+const Tooltip = dynamic(
+  () => import("react-leaflet").then((mod) => mod.Tooltip),
+  { ssr: false }
+);
+
 
 // Airport list
 const airports = [
@@ -62,6 +67,7 @@ const planeIcon = L.icon({
 
 export default function Home() {
   const [routes, setRoutes] = useState<any[]>([]);
+  const [selectedAirport, setSelectedAirport] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/routes")
@@ -95,30 +101,30 @@ export default function Home() {
             key={a.code}
             position={a.position as [number, number]}
             icon={planeIcon}
+            eventHandlers={{
+              click: () => setSelectedAirport(a.code), // Show routes on click
+            }}
           >
-            <Popup>
-              <div>
-                <h2 className="font-semibold">{a.name}</h2>
-                <button
-                  className="bg-blue-500 text-white px-2 py-1 rounded mt-2"
-                  onClick={() => alert(`Show routes from ${a.code}`)}
-                >
-                  View Routes
-                </button>
-              </div>
-            </Popup>
+            {/* Tooltip appears on hover */}
+            <Tooltip direction="top" offset={[0, -20]} opacity={1} permanent={false}>
+              {a.name}
+            </Tooltip>
           </Marker>
         ))}
 
+
         {/* Great-circle arcs for routes */}
-        {routes.map((r) => {
+        {routes.filter((r) => r.origin.code === selectedAirport).map((r) => {
           const from = turf.point([r.origin.lon, r.origin.lat]);
           const to = turf.point([r.destination.lon, r.destination.lat]);
           const line = turf.greatCircle(from, to, { npoints: 50 });
           const positions = line.geometry.coordinates.map((c: number[]) => [c[1], c[0]]);
 
-          return <Polyline key={r.id} positions={positions} color="blue" weight={2} />;
+          return (
+            <Polyline key={r.id} positions={positions} color="blue" weight={2} />
+          );
         })}
+
       </MapContainer>
     </main>
   );
