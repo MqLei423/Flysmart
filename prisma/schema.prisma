@@ -21,12 +21,31 @@ model Airport {
 }
 
 model Route {
-  id          Int      @id @default(autoincrement())
-  origin      Airport  @relation("From", fields: [originCode], references: [code])
-  originCode  String
-  destination Airport  @relation("To", fields: [destCode], references: [code])
-  destCode    String
-  airline     String
-  aircraft    String
-  lieFlat     Boolean
+  id           Int       @id @default(autoincrement())
+  origin       Airport   @relation("From", fields: [originCode], references: [code])
+  originCode   String
+  destination  Airport   @relation("To", fields: [destCode], references: [code])
+  destCode     String
+
+  airline      Airline   @relation(fields: [airlineCode], references: [code])
+  airlineCode  String
+
+  aircraft     Aircraft  @relation(fields: [aircraftCode], references: [code])
+  aircraftCode String
+
+  lieFlat      Boolean
+  frequency    String
+}
+
+model Airline {
+  code        String  @id
+  name        String
+  routes      Route[]
+}
+
+model Aircraft {
+  code        String  @id
+  model       String
+  class       String
+  routes      Route[]
 }
