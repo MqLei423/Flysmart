@@ -1,0 +1,32 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Airport {
+  code        String  @id
+  name        String
+  lat         Float
+  lon         Float
+  routesFrom  Route[] @relation("From")
+  routesTo    Route[] @relation("To")
+}
+
+model Route {
+  id          Int      @id @default(autoincrement())
+  origin      Airport  @relation("From", fields: [originCode], references: [code])
+  originCode  String
+  destination Airport  @relation("To", fields: [destCode], references: [code])
+  destCode    String
+  airline     String
+  aircraft    String
+  lieFlat     Boolean
+}
