@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
 import { useEffect, useState } from "react";
 import * as turf from "@turf/turf";
 
@@ -58,24 +57,27 @@ const airports = [
   { code: "OGG", name: "Maui Kahului", position: [20.8987, -156.4305] },
 ];
 
-// Custom marker icon
-const planeIcon = L.icon({
-  iconUrl: "/map_pin.png",
-  iconSize: [32, 32],
-  iconAnchor: [16, 32],
-  popupAnchor: [0, -32],
-});
-
 export default function Home() {
   const [routes, setRoutes] = useState<any[]>([]);
   const [selectedAirport, setSelectedAirport] = useState<string | null>(null);
+  const [L, setLeaflet] = useState<any>(null);
 
   useEffect(() => {
+    import("leaflet").then((leaflet) => setLeaflet(leaflet));
     fetch("/api/routes")
       .then((res) => res.json())
       .then((data) => setRoutes(data))
       .catch(console.error);
   }, []);
+
+  if (!L) return null;
+
+  const planeIcon = L.icon({
+    iconUrl: "/map_pin.png",
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+  });
 
   return (
     <main className="w-screen h-screen">
