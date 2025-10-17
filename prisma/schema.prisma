@@ -33,8 +33,8 @@ model Route {
   aircraft     Aircraft  @relation(fields: [aircraftCode], references: [code])
   aircraftCode String
 
-  lieFlat      Boolean
-  frequency    String
+  lieFlat      Boolean   @default(true)
+  frequency    String    @default("Year-round") 
 }
 
 model Airline {
