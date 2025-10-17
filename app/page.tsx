@@ -33,6 +33,7 @@ const Tooltip = dynamic(
 );
 
 
+
 // Airport list
 const airports = [
   { code: "JFK", name: "New York JFK", position: [40.6413, -73.7781] },
@@ -118,7 +119,11 @@ export default function Home() {
           const from = turf.point([r.origin.lon, r.origin.lat]);
           const to = turf.point([r.destination.lon, r.destination.lat]);
           const line = turf.greatCircle(from, to, { npoints: 50 });
-          const positions = line.geometry.coordinates.map((c: number[]) => [c[1], c[0]]);
+          const positions = (line.geometry.coordinates as [number, number][]).map(
+            (c) => [c[1], c[0]] as [number, number]
+          );
+
+
 
           return (
             <Polyline key={r.id} positions={positions} color="blue" weight={2} />
