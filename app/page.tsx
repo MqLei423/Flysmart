@@ -81,7 +81,7 @@ export default function Home() {
   });
 
   return (
-    <main className="w-screen h-screen">
+    <main className="relative w-screen h-screen">
       {hintVisible && (
         <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/90 text-black px-4 py-2 rounded-xl shadow-md text-sm font-medium z-[9999]">
           ✈️ Click an airport to start!
@@ -124,6 +124,35 @@ export default function Home() {
             </Tooltip>
           </Marker>
         ))}
+
+        {/* Sidebar list of routes */}
+        {selectedAirport && (
+          <div className="absolute top-4 right-4 bg-white p-4 rounded-xl shadow-lg w-72 max-h-[80vh] overflow-y-auto z-[9999]">
+            <h2 className="text-lg font-semibold mb-2 text-black">
+              Routes from {selectedAirport}
+            </h2>
+
+            {routes
+              .filter((r) => r.origin.code === selectedAirport)
+              .map((r) => (
+                <div key={r.id} className="border-b py-2">
+                  <span className="text-blue-700 font-medium">
+                    {r.destination.name} ({r.destination.code})
+                  </span>
+                  <br />
+                  <span className="text-sm text-black">
+                    {r.airline.name}
+                    {r.aircrafts.length > 0 && (
+                      <>
+                        {" • "}
+                        {r.aircrafts.map((a: { code: any; }) => a.code).join(", ")}
+                      </>
+                    )}
+                  </span>
+                </div>
+              ))}
+          </div>
+        )}
 
 
         {/* Great-circle arcs for routes */}
