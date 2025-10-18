@@ -105,7 +105,7 @@ export default function Home() {
         minZoom={3.5}
         maxZoom={8}
         maxBounds={[
-          [10, -200],  // southwest corner (includes Hawaii)
+          [0, -200],  // southwest corner (includes Hawaii)
           [70, -50],   // northeast corner
         ]}
         maxBoundsViscosity={1.0}
