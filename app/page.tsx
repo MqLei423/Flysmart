@@ -60,6 +60,7 @@ const airports = [
   { code: 'PBI', name: 'West Palm Beach Intl', position: [26.6832, -80.0956]},
   { code: 'FLL', name: 'Fort Lauderdale-Hollywood Intl', position: [26.0726, -80.1527]},
   { code: 'PHX', name: 'Phoenix Sky Harbor Intl', position: [33.4373, -112.0078]},
+  { code: 'ANC', name: 'Anchorage Ted Stevens Intl', position: [61.1743, -149.9983]},
 ];
 
 type RouteGroup = {
@@ -99,13 +100,13 @@ export default function Home() {
       )}
 
       <MapContainer
-        center={[39.5, -98.35]}   // Center of continental US
-        zoom={4}
-        minZoom={4}
+        center={[45, -135]}   // Center of continental US
+        zoom={3.5}
+        minZoom={3.5}
         maxZoom={8}
         maxBounds={[
-          [15, -180],  // southwest corner (includes Hawaii)
-          [55, -60],   // northeast corner
+          [10, -180],  // southwest corner (includes Hawaii)
+          [70, -60],   // northeast corner
         ]}
         maxBoundsViscosity={1.0}
         className="w-full h-full"
@@ -137,7 +138,7 @@ export default function Home() {
 
         {/* Sidebar list of routes */}
         {selectedAirport && (
-          <div className="absolute top-2 left-13 bg-white p-4 rounded-xl shadow-lg w-85 max-h-[80vh] overflow-y-auto z-[9999]">
+          <div className="absolute top-20 left-2 bg-white p-4 rounded-xl shadow-lg w-85 max-h-[80vh] overflow-y-auto z-[9999]">
             <h2 className="text-lg font-semibold mb-2 text-black">
               Routes from {selectedAirport}
             </h2>
