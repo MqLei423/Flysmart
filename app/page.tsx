@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
+import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useEffect, useState } from "react";
 import * as turf from "@turf/turf";
 
 // Dynamic imports for SSR
@@ -56,6 +56,11 @@ const airports = [
   { code: "HNL", name: "Honolulu Intl", position: [21.3187, -157.9225] },
   { code: "OGG", name: "Maui Kahului", position: [20.8987, -156.4305] },
 ];
+
+type RouteGroup = {
+  destination: any;
+  flights: any[];
+};
 
 export default function Home() {
   const [routes, setRoutes] = useState<any[]>([]);
@@ -127,30 +132,35 @@ export default function Home() {
 
         {/* Sidebar list of routes */}
         {selectedAirport && (
-          <div className="absolute top-4 right-4 bg-white p-4 rounded-xl shadow-lg w-72 max-h-[80vh] overflow-y-auto z-[9999]">
+          <div className="absolute top-2 left-13 bg-white p-4 rounded-xl shadow-lg w-72 max-h-[80vh] overflow-y-auto z-[9999]">
             <h2 className="text-lg font-semibold mb-2 text-black">
               Routes from {selectedAirport}
             </h2>
-
-            {routes
-              .filter((r) => r.origin.code === selectedAirport)
-              .map((r) => (
-                <div key={r.id} className="border-b py-2">
-                  <span className="text-blue-700 font-medium">
-                    {r.destination.name} ({r.destination.code})
-                  </span>
-                  <br />
-                  <span className="text-sm text-black">
+            
+            {Object.entries(
+              routes
+                .filter((r) => r.origin.code === selectedAirport)
+                .reduce((groups: Record<string, RouteGroup>, r) => {
+                  const dest = r.destination.code;
+                  if (!groups[dest]) groups[dest] = { destination: r.destination, flights: [] };
+                  groups[dest].flights.push(r);
+                  return groups;
+                }, {} as Record<string, { destination: any; flights: any[] }>)
+            ).map(([destCode, { destination, flights }]) => (
+              <div key={destCode} className="border-b py-2">
+                <div className="text-blue-700 font-medium">
+                  ✈️ {destination.name} ({destination.code})
+                </div>
+                {flights.map((r: { id: Key | null | undefined; airline: { name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }; aircrafts: any[]; }) => (
+                  <div key={r.id} className="text-sm text-gray-500 ml-4">
                     {r.airline.name}
                     {r.aircrafts.length > 0 && (
-                      <>
-                        {" • "}
-                        {r.aircrafts.map((a: { code: any; }) => a.code).join(", ")}
-                      </>
+                      <> • {r.aircrafts.map((a: { code: any; }) => a.code).join(", ")}</>
                     )}
-                  </span>
-                </div>
-              ))}
+                  </div>
+                ))}
+              </div>
+            ))}
           </div>
         )}
 
