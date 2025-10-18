@@ -8,7 +8,7 @@ export async function GET() {
       origin: true,
       destination: true,
       airline: true,
-      aircraft: true,
+      aircrafts: true,
     },
   });
   return NextResponse.json(routes);
