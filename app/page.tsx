@@ -137,7 +137,7 @@ export default function Home() {
 
         {/* Sidebar list of routes */}
         {selectedAirport && (
-          <div className="absolute top-2 left-13 bg-white p-4 rounded-xl shadow-lg w-72 max-h-[80vh] overflow-y-auto z-[9999]">
+          <div className="absolute top-2 left-13 bg-white p-4 rounded-xl shadow-lg w-85 max-h-[80vh] overflow-y-auto z-[9999]">
             <h2 className="text-lg font-semibold mb-2 text-black">
               Routes from {selectedAirport}
             </h2>
@@ -156,9 +156,14 @@ export default function Home() {
                 <div className="text-blue-700 font-medium">
                   ✈️ {destination.name} ({destination.code})
                 </div>
-                {flights.map((r: { id: Key | null | undefined; airline: { name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }; aircrafts: any[]; }) => (
+                {flights.map((r: {
+                  frequency: any; id: Key | null | undefined; airline: { name: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined; }; aircrafts: any[]; 
+}) => (
                   <div key={r.id} className="text-sm text-gray-500 ml-4">
                     {r.airline.name}
+                    {r.frequency && (
+                      <> • {r.frequency}</>
+                    )}
                     {r.aircrafts.length > 0 && (
                       <> • {r.aircrafts.map((a: { code: any; }) => a.code).join(", ")}</>
                     )}
