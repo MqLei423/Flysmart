@@ -55,6 +55,11 @@ const airports = [
   { code: "DTW", name: "Detroit Metro Wayne County", position: [42.2162, -83.3554] },
   { code: "HNL", name: "Honolulu Intl", position: [21.3187, -157.9225] },
   { code: "OGG", name: "Maui Kahului", position: [20.8987, -156.4305] },
+  { code: 'SJU', name: 'San Juan Luis Muñoz Marín Intl', position: [18.4394, -66.0018]},
+  { code: 'BZN', name: 'Bozeman Yellowstone Intl', position: [45.7778, -111.1530]},
+  { code: 'PBI', name: 'West Palm Beach Intl', position: [26.6832, -80.0956]},
+  { code: 'FLL', name: 'Fort Lauderdale-Hollywood Intl', position: [26.0726, -80.1527]},
+  { code: 'PHX', name: 'Phoenix Sky Harbor Intl', position: [33.4373, -112.0078]},
 ];
 
 type RouteGroup = {
