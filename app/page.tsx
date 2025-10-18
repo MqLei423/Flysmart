@@ -61,6 +61,7 @@ export default function Home() {
   const [routes, setRoutes] = useState<any[]>([]);
   const [selectedAirport, setSelectedAirport] = useState<string | null>(null);
   const [L, setLeaflet] = useState<any>(null);
+  const [hintVisible, setHintVisible] = useState(true); // display hint
 
   useEffect(() => {
     import("leaflet").then((leaflet) => setLeaflet(leaflet));
@@ -81,6 +82,12 @@ export default function Home() {
 
   return (
     <main className="w-screen h-screen">
+      {hintVisible && (
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-white/90 text-black px-4 py-2 rounded-xl shadow-md text-sm font-medium z-[9999]">
+          ✈️ Click an airport to start!
+        </div>
+      )}
+
       <MapContainer
         center={[39.5, -98.35]}   // Center of continental US
         zoom={4}
@@ -105,7 +112,10 @@ export default function Home() {
             position={a.position as [number, number]}
             icon={planeIcon}
             eventHandlers={{
-              click: () => setSelectedAirport(a.code), // Show routes on click
+              click: () => {
+                setSelectedAirport(a.code); // Show routes on click
+                setHintVisible(false);
+              }
             }}
           >
             {/* Tooltip appears on hover */}
@@ -136,3 +146,5 @@ export default function Home() {
     </main>
   );
 }
+
+
