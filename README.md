@@ -6,7 +6,7 @@ This map contains all the routes that are operated by aircraft with lie-flat sea
 It includes routes within: Contiguous US, Hawaii, Alaska and Peurto Rico.
 
 ## Updates:
--  Jetblue mint service: Fully updated
+-  Jetblue Mint service: Fully updated
 -  Hawaiian Airlines Domestic First: To be added
 -  American Airlines Flagship service & lie-flat Domestic First: All A321T routes added
 -  Delta One & Lie-flat Domestic First: To be added
