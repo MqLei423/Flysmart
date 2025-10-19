@@ -7,9 +7,9 @@ A web app to track domestic routes with lie-flat seats in the US.
 This map contains all the routes that are operated by aircraft with lie-flat seats within the US.
 It includes routes within: Contiguous US, Hawaii, Alaska and Peurto Rico.
 
-## Updates:
+## Updates: (As of Oct 2025)
 -  Jetblue Mint service: Fully updated
--  Hawaiian Airlines Domestic First: To be added
+-  Hawaiian Airlines Domestic First: Fully updated
 -  American Airlines Flagship service & lie-flat Domestic First: All A321T routes added
 -  Delta One & Lie-flat Domestic First: To be added
 -  United Polaris & Lie-flat Domestic First: To be added
