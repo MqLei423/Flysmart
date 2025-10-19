@@ -1,4 +1,6 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Flysmart
+A web app to track domestic routes with lie-flat seats in the US.
 
 ## Tired of Recliner seats in First/Busines Class? Find routes with lie-flat seats here!
 
