@@ -61,6 +61,9 @@ const airports = [
   { code: 'FLL', name: 'Fort Lauderdale-Hollywood Intl', position: [26.0726, -80.1527]},
   { code: 'PHX', name: 'Phoenix Sky Harbor Intl', position: [33.4373, -112.0078]},
   { code: 'ANC', name: 'Anchorage Ted Stevens Intl', position: [61.1743, -149.9983]},
+  { code: 'PDX', name: 'Portland Intl', position: [45.5898, -122.5951]},
+  { code: 'SLC', name: 'Salt Lake City Intl', postions: [40.7899, -111.9791]},
+  { code: 'SMF', name: 'Sacramento Intl', position: [38.6954, -121.5908]},
 ];
 
 type RouteGroup = {
