@@ -64,6 +64,10 @@ const airports = [
   { code: 'PDX', name: 'Portland Intl', position: [45.5898, -122.5951]},
   { code: 'SLC', name: 'Salt Lake City Intl', position: [40.7899, -111.9791]},
   { code: 'SMF', name: 'Sacramento Intl', position: [38.6954, -121.5908]},
+  { code: "IAD", name: "Washington Dulles Intl", position: [38.9531, -77.4565] },
+  { code: "PHL", name: "Philadelphia Intl", position: [39.8744, -75.2424] },
+  { code: "IAH", name: "Houston George Bush Intercontinental", position: [29.9902, -95.3368] },
+
 ];
 
 type RouteGroup = {
